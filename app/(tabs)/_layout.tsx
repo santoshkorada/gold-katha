@@ -1,0 +1,70 @@
+import { Tabs } from 'expo-router';
+import {
+  LayoutDashboard,
+  FilePlus2,
+  Vault,
+  Receipt,
+} from 'lucide-react-native';
+import { Colors } from '@/lib/theme';
+
+export default function TabLayout() {
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: Colors.gold[400],
+        tabBarInactiveTintColor: Colors.textMuted,
+        tabBarStyle: {
+          backgroundColor: Colors.surface,
+          borderTopColor: Colors.border,
+          borderTopWidth: 1,
+          height: 64,
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '600',
+          fontFamily: 'Manrope-Medium',
+        },
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Dashboard',
+          tabBarIcon: ({ size, color }) => (
+            <LayoutDashboard size={size} color={color} strokeWidth={2} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="new-loan"
+        options={{
+          title: 'New Loan',
+          tabBarIcon: ({ size, color }) => (
+            <FilePlus2 size={size} color={color} strokeWidth={2} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="vault"
+        options={{
+          title: 'Vault',
+          tabBarIcon: ({ size, color }) => (
+            <Vault size={size} color={color} strokeWidth={2} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="receipt"
+        options={{
+          title: 'Receipt',
+          tabBarIcon: ({ size, color }) => (
+            <Receipt size={size} color={color} strokeWidth={2} />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}
