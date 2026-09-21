@@ -5,6 +5,7 @@ import {
   View,
   ViewStyle,
   TextStyle,
+  Pressable,
 } from 'react-native';
 import { ReactNode } from 'react';
 import { Colors, FontSizes, Radius, Spacing } from '@/lib/theme';
@@ -78,8 +79,9 @@ export function DropdownField({
         {options.map((option) => {
           const selected = option.value === value;
           return (
-            <View
+            <Pressable
               key={option.value}
+              onPress={() => onSelect(option.value)}
               style={[
                 styles.dropdownOption,
                 selected && styles.dropdownOptionSelected,
@@ -90,11 +92,10 @@ export function DropdownField({
                   styles.dropdownOptionText,
                   selected && styles.dropdownOptionTextSelected,
                 ]}
-                onPress={() => onSelect(option.value)}
               >
                 {option.label}
               </Text>
-            </View>
+            </Pressable>
           );
         })}
       </View>

@@ -34,6 +34,7 @@ export const Colors = {
     100: '#d0e0d8',
   },
   // Semantic
+  primary: '#d4af37',
   success: '#2d8c6a',
   warning: '#d4af37',
   error: '#c0392b',

@@ -29,6 +29,11 @@ import {
 import { Colors, FontSizes, Spacing, Radius, Shadows } from '@/lib/theme';
 import { supabase, Loan } from '@/lib/supabase';
 import { formatINR, formatDate, formatTime } from '@/lib/format';
+import {
+  interestDurationSuffix,
+  interestPeriodLabel,
+  totalInterest,
+} from '@/lib/interest';
 
 export default function ReceiptScreen() {
   const params = useLocalSearchParams<{ loanId?: string }>();
@@ -61,6 +66,10 @@ export default function ReceiptScreen() {
   }, [fetchLoans]);
 
   const buildReceiptText = (loan: Loan): string => {
+    const type = loan.interest_type || 'monthly';
+    const perHundred = Number(loan.interest_per_hundred) || 0;
+    const duration = Number(loan.duration) || 1;
+    const interest = totalInterest(Number(loan.principal), perHundred, duration);
     const lines = [
       '━━━━━━━━━━━━━━━━━━━━━',
       '  SWARNA KHATA',
@@ -81,6 +90,10 @@ export default function ReceiptScreen() {
       '',
       '--- Loan Details ---',
       `Principal: ${formatINR(Number(loan.principal))}`,
+      `Interest Type: ${type === 'daily' ? 'Daily' : 'Monthly'}`,
+      `Interest Rate: ₹${perHundred} per ₹100 / ${interestPeriodLabel(type)}`,
+      `Duration: ${duration} ${interestDurationSuffix(type, duration)}`,
+      `Interest Amount: ${formatINR(interest)}`,
       `LTV: ${Number(loan.ltv_percentage).toFixed(1)}%`,
       `Status: ${loan.status.toUpperCase()}`,
       '',
@@ -358,6 +371,42 @@ export default function ReceiptScreen() {
                         </Text>
                         <Text style={styles.receiptAmountValue}>
                           {formatINR(Number(selectedLoan.principal))}
+                        </Text>
+                      </View>
+                      <View style={styles.receiptInfoRow}>
+                        <Text style={styles.receiptInfoLabel}>Interest Type</Text>
+                        <Text style={styles.receiptInfoValue}>
+                          {(selectedLoan.interest_type || 'monthly') === 'daily'
+                            ? 'Daily'
+                            : 'Monthly'}
+                        </Text>
+                      </View>
+                      <View style={styles.receiptInfoRow}>
+                        <Text style={styles.receiptInfoLabel}>Rate</Text>
+                        <Text style={styles.receiptInfoValue}>
+                          ₹{Number(selectedLoan.interest_per_hundred) || 0} / ₹100
+                        </Text>
+                      </View>
+                      <View style={styles.receiptInfoRow}>
+                        <Text style={styles.receiptInfoLabel}>Duration</Text>
+                        <Text style={styles.receiptInfoValue}>
+                          {Number(selectedLoan.duration) || 1}{' '}
+                          {interestDurationSuffix(
+                            selectedLoan.interest_type || 'monthly',
+                            Number(selectedLoan.duration) || 1
+                          )}
+                        </Text>
+                      </View>
+                      <View style={styles.receiptInfoRow}>
+                        <Text style={styles.receiptInfoLabel}>Interest</Text>
+                        <Text style={styles.receiptInfoValue}>
+                          {formatINR(
+                            totalInterest(
+                              Number(selectedLoan.principal),
+                              Number(selectedLoan.interest_per_hundred) || 0,
+                              Number(selectedLoan.duration) || 1
+                            )
+                          )}
                         </Text>
                       </View>
                       <View style={styles.receiptInfoRow}>

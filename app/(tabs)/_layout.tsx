@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import {
   LayoutDashboard,
   FilePlus2,
+  ScrollText,
   Vault,
   Receipt,
 } from 'lucide-react-native';
@@ -48,14 +49,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="vault"
+        name="loans"
         options={{
-          title: 'Vault',
+          title: 'Loans',
           tabBarIcon: ({ size, color }) => (
-            <Vault size={size} color={color} strokeWidth={2} />
+            <ScrollText size={size} color={color} strokeWidth={2} />
           ),
         }}
       />
+
       <Tabs.Screen
         name="receipt"
         options={{
