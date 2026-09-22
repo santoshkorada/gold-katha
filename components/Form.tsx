@@ -160,10 +160,10 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.surfaceElevated,
+    backgroundColor: Colors.surface,
     borderRadius: Radius.md,
     borderWidth: 1,
-    borderColor: Colors.neutral[600],
+    borderColor: Colors.border,
   },
   input: {
     flex: 1,
@@ -199,13 +199,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     borderRadius: Radius.md,
     borderWidth: 1,
-    borderColor: Colors.neutral[600],
-    backgroundColor: Colors.surfaceElevated,
+    borderColor: Colors.border,
+    backgroundColor: Colors.surface,
     alignItems: 'center',
   },
   dropdownOptionSelected: {
-    borderColor: Colors.gold[400],
-    backgroundColor: 'rgba(212, 175, 55, 0.12)',
+    borderColor: Colors.gold[500],
+    backgroundColor: 'rgba(217, 119, 6, 0.08)',
   },
   dropdownOptionText: {
     fontSize: FontSizes.md,
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
   },
   dropdownOptionTextSelected: {
-    color: Colors.gold[400],
+    color: Colors.gold[600],
   },
   btnBase: {
     borderRadius: Radius.lg,
@@ -222,18 +222,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btn_primary: {
-    backgroundColor: Colors.emerald[600],
+    backgroundColor: Colors.primary,
   },
   btn_gold: {
-    backgroundColor: Colors.gold[400],
+    backgroundColor: Colors.gold[500],
   },
   btn_success: {
-    backgroundColor: Colors.emerald[500],
+    backgroundColor: Colors.success,
   },
   btn_ghost: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: Colors.neutral[600],
+    borderColor: Colors.border,
   },
   btn_danger: {
     backgroundColor: 'transparent',
@@ -248,10 +248,10 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   btnText_primary: {
-    color: Colors.textPrimary,
+    color: Colors.surface,
   },
   btnText_gold: {
-    color: Colors.emerald[900],
+    color: Colors.surface,
   },
   btnText_success: {
     color: Colors.textPrimary,

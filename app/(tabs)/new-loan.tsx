@@ -311,7 +311,7 @@ export default function NewLoanScreen() {
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <View style={styles.successContainer}>
           <LinearGradient
-            colors={[Colors.emerald[800], Colors.emerald[900]]}
+            colors={[Colors.primary, Colors.emerald[800]]}
             style={styles.successCard}
           >
             <View style={styles.successIconWrapper}>
@@ -321,8 +321,8 @@ export default function NewLoanScreen() {
                 strokeWidth={2}
               />
             </View>
-            <Text style={styles.successTitle}>Loan Created!</Text>
-            <Text style={styles.successSubtitle}>
+            <Text style={[styles.successTitle, { color: Colors.surface }]}>Loan Created!</Text>
+            <Text style={[styles.successSubtitle, { color: Colors.surface }]}>
               The loan has been recorded successfully.
             </Text>
 
@@ -580,6 +580,62 @@ export default function NewLoanScreen() {
               onSelect={setPurity}
             />
 
+            {/* LTV Display */}
+            <LinearGradient
+              colors={[Colors.primary, Colors.emerald[800]]}
+              style={[styles.ltvCard, { marginBottom: Spacing.xl }]}
+            >
+              <View style={styles.ltvHeader}>
+                <Calculator size={18} color={Colors.gold[400]} strokeWidth={2} />
+                <Text style={styles.ltvTitle}>Loan-to-Value (LTV)</Text>
+              </View>
+
+              <View style={styles.ltvBody}>
+                <View style={styles.ltvMainRow}>
+                  <Text style={[styles.ltvLabel, { color: Colors.surface }]}>LTV Percentage</Text>
+                  <Text style={[styles.ltvValue, { color: ltvColor }]}>
+                    {ltvPercentage.toFixed(1)}%
+                  </Text>
+                </View>
+
+                <View style={styles.ltvDetailRow}>
+                  <Text style={styles.ltvDetailLabel}>Gold Value</Text>
+                  <Text style={styles.ltvDetailValue}>
+                    {formatINR(goldValue)}
+                  </Text>
+                </View>
+                <View style={styles.ltvDetailRow}>
+                  <Text style={styles.ltvDetailLabel}>Principal</Text>
+                  <Text style={styles.ltvDetailValue}>
+                    {formatINR(principalNum)}
+                  </Text>
+                </View>
+                <View style={styles.ltvDetailRow}>
+                  <Text style={styles.ltvDetailLabel}>
+                    Interest ({durationNum || 0}{' '}
+                    {interestDurationSuffix(interestType, durationNum || 1)})
+                  </Text>
+                  <Text style={styles.ltvDetailValue}>
+                    {formatINR(interestAmount)}
+                  </Text>
+                </View>
+              </View>
+
+              {ltvWarning ? (
+                <View
+                  style={[
+                    styles.ltvWarningBar,
+                    { backgroundColor: `${ltvColor}15` },
+                  ]}
+                >
+                  <AlertCircle size={14} color={ltvColor} strokeWidth={2} />
+                  <Text style={[styles.ltvWarningText, { color: ltvColor }]}>
+                    {ltvWarning}
+                  </Text>
+                </View>
+              ) : null}
+            </LinearGradient>
+
             <FormField
               label="Principal Cash Lent"
               value={principal}
@@ -645,61 +701,7 @@ export default function NewLoanScreen() {
             </View>
           </View>
 
-          {/* LTV Display */}
-          <LinearGradient
-            colors={[Colors.emerald[800], Colors.emerald[850]]}
-            style={styles.ltvCard}
-          >
-            <View style={styles.ltvHeader}>
-              <Calculator size={18} color={Colors.gold[400]} strokeWidth={2} />
-              <Text style={styles.ltvTitle}>Loan-to-Value (LTV)</Text>
-            </View>
 
-            <View style={styles.ltvBody}>
-              <View style={styles.ltvMainRow}>
-                <Text style={styles.ltvLabel}>LTV Percentage</Text>
-                <Text style={[styles.ltvValue, { color: ltvColor }]}>
-                  {ltvPercentage.toFixed(1)}%
-                </Text>
-              </View>
-
-              <View style={styles.ltvDetailRow}>
-                <Text style={styles.ltvDetailLabel}>Gold Value</Text>
-                <Text style={styles.ltvDetailValue}>
-                  {formatINR(goldValue)}
-                </Text>
-              </View>
-              <View style={styles.ltvDetailRow}>
-                <Text style={styles.ltvDetailLabel}>Principal</Text>
-                <Text style={styles.ltvDetailValue}>
-                  {formatINR(principalNum)}
-                </Text>
-              </View>
-              <View style={styles.ltvDetailRow}>
-                <Text style={styles.ltvDetailLabel}>
-                  Interest ({durationNum || 0}{' '}
-                  {interestDurationSuffix(interestType, durationNum || 1)})
-                </Text>
-                <Text style={styles.ltvDetailValue}>
-                  {formatINR(interestAmount)}
-                </Text>
-              </View>
-            </View>
-
-            {ltvWarning ? (
-              <View
-                style={[
-                  styles.ltvWarningBar,
-                  { backgroundColor: `${ltvColor}15` },
-                ]}
-              >
-                <AlertCircle size={14} color={ltvColor} strokeWidth={2} />
-                <Text style={[styles.ltvWarningText, { color: ltvColor }]}>
-                  {ltvWarning}
-                </Text>
-              </View>
-            ) : null}
-          </LinearGradient>
 
           {error && (
             <View style={styles.errorBar}>
@@ -792,7 +794,7 @@ const styles = StyleSheet.create({
   ltvCard: {
     borderRadius: Radius.lg,
     borderWidth: 1,
-    borderColor: Colors.emerald[600],
+    borderColor: Colors.primary,
     overflow: 'hidden',
   },
   ltvHeader: {
@@ -837,12 +839,12 @@ const styles = StyleSheet.create({
   ltvDetailLabel: {
     fontFamily: 'Manrope-Regular',
     fontSize: FontSizes.sm,
-    color: Colors.textMuted,
+    color: Colors.emerald[300],
   },
   ltvDetailValue: {
     fontFamily: 'Manrope-SemiBold',
     fontSize: FontSizes.sm,
-    color: Colors.textPrimary,
+    color: Colors.surface,
   },
   ltvWarningBar: {
     flexDirection: 'row',
@@ -924,12 +926,12 @@ const styles = StyleSheet.create({
   summaryLabel: {
     fontFamily: 'Manrope-Regular',
     fontSize: FontSizes.sm,
-    color: Colors.textMuted,
+    color: Colors.emerald[300],
   },
   summaryValue: {
     fontFamily: 'Manrope-SemiBold',
     fontSize: FontSizes.sm,
-    color: Colors.textPrimary,
+    color: Colors.surface,
   },
   successActions: {
     flexDirection: 'row',

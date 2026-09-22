@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, router, useFocusEffect } from 'expo-router';
-import { ArrowLeft, X, Image as ImageIcon } from 'lucide-react-native';
+import { ArrowLeft, X, Image as ImageIcon, Share2 } from 'lucide-react-native';
 import { Colors, FontSizes, Spacing, Radius, Shadows } from '@/lib/theme';
 import { supabase, Loan } from '@/lib/supabase';
 import { formatINR, formatDate, formatTime } from '@/lib/format';
@@ -197,14 +197,26 @@ export default function LoanDetailScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.nav}>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.backButton}
-          activeOpacity={0.7}
-        >
-          <ArrowLeft size={20} color={Colors.textPrimary} strokeWidth={2} />
-        </TouchableOpacity>
-        <Text style={styles.navTitle}>Loan details</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.md }}>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={styles.backButton}
+            activeOpacity={0.7}
+          >
+            <ArrowLeft size={20} color={Colors.textPrimary} strokeWidth={2} />
+          </TouchableOpacity>
+          <Text style={styles.navTitle}>Loan details</Text>
+        </View>
+        
+        {loan && (
+          <TouchableOpacity
+            onPress={() => router.push({ pathname: '/receipt', params: { loanId: loan.id }})}
+            style={[styles.backButton, { backgroundColor: 'rgba(212, 175, 55, 0.1)' }]}
+            activeOpacity={0.7}
+          >
+            <Share2 size={18} color={Colors.gold[400]} strokeWidth={2} />
+          </TouchableOpacity>
+        )}
       </View>
 
       {loading ? (
@@ -223,15 +235,15 @@ export default function LoanDetailScreen() {
           contentContainerStyle={styles.scrollContent}
         >
           <LinearGradient
-            colors={[Colors.emerald[800], Colors.emerald[900]]}
+            colors={[Colors.primary, Colors.emerald[800]]}
             style={styles.summaryCard}
           >
-            <Text style={styles.customerName}>{loan.customer_name}</Text>
-            <Text style={styles.phone}>+91 {loan.phone}</Text>
-            <Text style={styles.principal}>{formatINR(Number(loan.principal))}</Text>
-            <Text style={styles.principalHint}>Principal</Text>
+            <Text style={[styles.customerName, { color: Colors.surface }]}>{loan.customer_name}</Text>
+            <Text style={[styles.phone, { color: Colors.neutral[400] }]}>+91 {loan.phone}</Text>
+            <Text style={[styles.principal, { color: Colors.surface }]}>{formatINR(Number(loan.principal))}</Text>
+            <Text style={[styles.principalHint, { color: Colors.neutral[400] }]}>Principal</Text>
             <View style={styles.summaryMeta}>
-              <Text style={styles.summaryMetaText}>
+              <Text style={[styles.summaryMetaText, { color: Colors.neutral[400] }]}>
                 {formatDate(loan.created_at)} {formatTime(loan.created_at)}
               </Text>
               <Text
@@ -531,7 +543,7 @@ const styles = StyleSheet.create({
   nav: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
   },
@@ -571,7 +583,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.xl,
     padding: Spacing.xl,
     borderWidth: 1,
-    borderColor: Colors.emerald[600],
+    borderColor: Colors.primary,
     marginBottom: Spacing.lg,
   },
   customerName: {
@@ -612,7 +624,7 @@ const styles = StyleSheet.create({
   summaryStatus: {
     fontFamily: 'Manrope-SemiBold',
     fontSize: FontSizes.xs,
-    color: Colors.emerald[300],
+    color: Colors.surface,
     textTransform: 'capitalize',
   },
   card: {
@@ -693,18 +705,18 @@ const styles = StyleSheet.create({
   // Modal
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(5, 10, 8, 0.8)',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing.xl,
   },
   modalCard: {
     width: '100%',
-    backgroundColor: Colors.surfaceElevated,
+    backgroundColor: Colors.surface,
     borderRadius: Radius.xl,
     padding: Spacing.xl,
     borderWidth: 1,
-    borderColor: Colors.emerald[700],
+    borderColor: Colors.border,
     ...Shadows.large,
   },
   modalHeader: {
@@ -773,17 +785,17 @@ const styles = StyleSheet.create({
     color: Colors.gold[400],
   },
   goldReturnInfo: {
-    backgroundColor: 'rgba(45, 140, 106, 0.1)',
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
     borderRadius: Radius.md,
     padding: Spacing.md,
     borderWidth: 1,
-    borderColor: Colors.emerald[700],
+    borderColor: Colors.success,
     marginBottom: Spacing.sm,
   },
   goldReturnText: {
     fontFamily: 'Manrope-Medium',
     fontSize: FontSizes.xs,
-    color: Colors.emerald[300],
+    color: Colors.success,
     textAlign: 'center',
     marginVertical: 2,
   },

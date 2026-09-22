@@ -13,7 +13,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: Colors.gold[400],
+        tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.textMuted,
         tabBarStyle: {
           backgroundColor: Colors.surface,
@@ -54,16 +54,6 @@ export default function TabLayout() {
           title: 'Loans',
           tabBarIcon: ({ size, color }) => (
             <ScrollText size={size} color={color} strokeWidth={2} />
-          ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="receipt"
-        options={{
-          title: 'Receipt',
-          tabBarIcon: ({ size, color }) => (
-            <Receipt size={size} color={color} strokeWidth={2} />
           ),
         }}
       />

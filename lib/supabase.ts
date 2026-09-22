@@ -27,6 +27,18 @@ AppState.addEventListener('change', (state) => {
     supabase.auth.stopAutoRefresh();
   }
 });
+
+export type Tenant = {
+  id: string;
+  name: string;
+  location: string | null;
+  gst_number: string | null;
+  phone_number: string | null;
+  address: string | null;
+  logo_url: string | null;
+  created_at: string;
+};
+
 export type GoldRate = {
   id: string;
   purity: '22k' | '20k' | '18k';

@@ -13,10 +13,14 @@
 
 -- Tenants (shops / workspaces)
 CREATE TABLE IF NOT EXISTS tenants (
-  id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name       text NOT NULL,
-  location   text,
-  created_at timestamptz DEFAULT now()
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name         text NOT NULL,
+  location     text,
+  gst_number   text,
+  phone_number text,
+  address      text,
+  logo_url     text,
+  created_at   timestamptz DEFAULT now()
 );
 ALTER TABLE tenants ENABLE ROW LEVEL SECURITY;
 

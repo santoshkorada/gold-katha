@@ -37,33 +37,30 @@ import {
 
 export default function ReceiptScreen() {
   const params = useLocalSearchParams<{ loanId?: string }>();
-  const [loans, setLoans] = useState<Loan[]>([]);
   const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null);
   const [loading, setLoading] = useState(true);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
 
-  const fetchLoans = useCallback(async () => {
+  const fetchLoan = useCallback(async () => {
+    if (!params.loanId) {
+      setLoading(false);
+      return;
+    }
     const { data } = await supabase
       .from('loans')
       .select('*')
-      .order('created_at', { ascending: false });
+      .eq('id', params.loanId)
+      .maybeSingle();
+      
     if (data) {
-      const sorted = data as Loan[];
-      setLoans(sorted);
-      if (params.loanId) {
-        const found = sorted.find((l) => l.id === params.loanId);
-        if (found) setSelectedLoan(found);
-      } else if (sorted.length > 0) {
-        setSelectedLoan(sorted[0]);
-      }
+      setSelectedLoan(data as Loan);
     }
     setLoading(false);
   }, [params.loanId]);
 
   useEffect(() => {
-    fetchLoans();
-  }, [fetchLoans]);
+    fetchLoan();
+  }, [fetchLoan]);
 
   const buildReceiptText = (loan: Loan): string => {
     const type = loan.interest_type || 'monthly';
@@ -199,80 +196,17 @@ export default function ReceiptScreen() {
           </View>
         </View>
 
-        {loans.length === 0 ? (
+        {!selectedLoan ? (
           <View style={styles.emptyState}>
             <Receipt size={40} color={Colors.neutral[500]} strokeWidth={1.5} />
-            <Text style={styles.emptyStateTitle}>No receipts yet</Text>
+            <Text style={styles.emptyStateTitle}>Receipt not found</Text>
             <Text style={styles.emptyStateText}>
-              Create a loan from the New Loan tab to generate a receipt.
+              The loan for this receipt could not be found.
             </Text>
           </View>
         ) : (
           <>
-            {/* Loan Selector */}
-            <TouchableOpacity
-              style={styles.selector}
-              onPress={() => setDropdownOpen(!dropdownOpen)}
-              activeOpacity={0.7}
-            >
-              <View style={styles.selectorLeft}>
-                <Text style={styles.selectorLabel}>Select Loan</Text>
-                <Text style={styles.selectorValue} numberOfLines={1}>
-                  {selectedLoan
-                    ? `${selectedLoan.customer_name} — ${formatINR(Number(selectedLoan.principal))}`
-                    : 'Choose a loan...'}
-                </Text>
-              </View>
-              <ChevronDown
-                size={20}
-                color={Colors.textMuted}
-                strokeWidth={2}
-                style={{
-                  transform: [{ rotate: dropdownOpen ? '180deg' : '0deg' }],
-                }}
-              />
-            </TouchableOpacity>
-
-            {dropdownOpen && (
-              <View style={styles.dropdown}>
-                {loans.map((loan) => (
-                  <TouchableOpacity
-                    key={loan.id}
-                    style={[
-                      styles.dropdownItem,
-                      selectedLoan?.id === loan.id &&
-                        styles.dropdownItemSelected,
-                    ]}
-                    onPress={() => {
-                      setSelectedLoan(loan);
-                      setDropdownOpen(false);
-                    }}
-                    activeOpacity={0.6}
-                  >
-                    <View style={styles.dropdownItemLeft}>
-                      <Text style={styles.dropdownItemName}>
-                        {loan.customer_name}
-                      </Text>
-                      <Text style={styles.dropdownItemMeta}>
-                        {formatINR(Number(loan.principal))} •{' '}
-                        {formatDate(loan.created_at)}
-                      </Text>
-                    </View>
-                    {selectedLoan?.id === loan.id && (
-                      <CheckCircle2
-                        size={16}
-                        color={Colors.gold[400]}
-                        strokeWidth={2}
-                      />
-                    )}
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-
-            {selectedLoan && (
-              <>
-                {/* Receipt Card */}
+            {/* Receipt Card */}
                 <View style={styles.receiptWrapper}>
                   <LinearGradient
                     colors={[Colors.emerald[800], Colors.emerald[900]]}
@@ -519,8 +453,6 @@ export default function ReceiptScreen() {
                     Share via other apps
                   </Text>
                 </TouchableOpacity>
-              </>
-            )}
           </>
         )}
       </ScrollView>
@@ -704,7 +636,7 @@ const styles = StyleSheet.create({
   receiptIdText: {
     fontFamily: 'Manrope-SemiBold',
     fontSize: FontSizes.xs,
-    color: Colors.textSecondary,
+    color: Colors.emerald[300],
   },
   receiptDatePill: {
     flexDirection: 'row',
@@ -749,12 +681,12 @@ const styles = StyleSheet.create({
   receiptInfoLabel: {
     fontFamily: 'Manrope-Regular',
     fontSize: FontSizes.sm,
-    color: Colors.textMuted,
+    color: Colors.emerald[300],
   },
   receiptInfoValue: {
     fontFamily: 'Manrope-SemiBold',
     fontSize: FontSizes.sm,
-    color: Colors.textPrimary,
+    color: Colors.surface,
     marginLeft: 'auto',
   },
   receiptAmountRow: {
@@ -766,7 +698,7 @@ const styles = StyleSheet.create({
   receiptAmountLabel: {
     fontFamily: 'Manrope-Medium',
     fontSize: FontSizes.md,
-    color: Colors.textSecondary,
+    color: Colors.emerald[300],
   },
   receiptAmountValue: {
     fontFamily: 'Manrope-ExtraBold',
@@ -789,12 +721,12 @@ const styles = StyleSheet.create({
   receiptColLabel: {
     fontFamily: 'Manrope-Regular',
     fontSize: FontSizes.xs,
-    color: Colors.textMuted,
+    color: Colors.emerald[300],
   },
   receiptColValue: {
     fontFamily: 'Manrope-SemiBold',
     fontSize: FontSizes.md,
-    color: Colors.textPrimary,
+    color: Colors.surface,
   },
   receiptColValueMuted: {
     color: Colors.neutral[500],
@@ -844,7 +776,7 @@ const styles = StyleSheet.create({
   whatsappButtonText: {
     fontFamily: 'Manrope-Bold',
     fontSize: FontSizes.lg,
-    color: Colors.textPrimary,
+    color: Colors.surface,
   },
   shareSuccessBar: {
     flexDirection: 'row',

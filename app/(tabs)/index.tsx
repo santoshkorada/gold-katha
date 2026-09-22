@@ -145,7 +145,7 @@ export default function DashboardScreen() {
         ) : (
           <>
             <LinearGradient
-              colors={[Colors.emerald[700], Colors.emerald[900]]}
+              colors={[Colors.primary, Colors.emerald[800]]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.cashOutCard}
@@ -156,19 +156,19 @@ export default function DashboardScreen() {
                 </View>
                 <Text style={styles.cashOutLabel}>Total Cash Out</Text>
               </View>
-              <Text style={styles.cashOutAmount}>
+              <Text style={[styles.cashOutAmount, { color: Colors.surface }]}>
                 {formatINR(totalCashOut)}
               </Text>
               <View style={styles.cashOutFooter}>
                 <View style={styles.cashOutStat}>
-                  <Text style={styles.cashOutStatValue}>
+                  <Text style={[styles.cashOutStatValue, { color: Colors.surface }]}>
                     {activeLoans.length}
                   </Text>
                   <Text style={styles.cashOutStatLabel}>Active Loans</Text>
                 </View>
                 <View style={styles.cashOutDivider} />
                 <View style={styles.cashOutStat}>
-                  <Text style={styles.cashOutStatValue}>
+                  <Text style={[styles.cashOutStatValue, { color: Colors.surface }]}>
                     {totalGoldHeld.toFixed(2)}g
                   </Text>
                   <Text style={styles.cashOutStatLabel}>Gold Held</Text>
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     padding: Spacing.xl,
     marginBottom: Spacing.xl,
     borderWidth: 1,
-    borderColor: Colors.emerald[600],
+    borderColor: Colors.primary,
     ...Shadows.medium,
   },
   cashOutHeader: {
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
   loanAmount: {
     fontFamily: 'Manrope-Bold',
     fontSize: FontSizes.md,
-    color: Colors.gold[300],
+    color: Colors.textPrimary,
   },
   ltvBadge: {
     flexDirection: 'row',
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
   ltvText: {
     fontFamily: 'Manrope-Medium',
     fontSize: 10,
-    color: Colors.gold[300],
+    color: Colors.textMuted,
   },
   emptyState: {
     backgroundColor: Colors.surface,
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.8)',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
     justifyContent: 'center',
     padding: Spacing.xl,
   },
@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.xl,
     padding: Spacing.xl,
     borderWidth: 1,
-    borderColor: Colors.emerald[600],
+    borderColor: Colors.border,
     ...Shadows.large,
   },
   modalTitle: {

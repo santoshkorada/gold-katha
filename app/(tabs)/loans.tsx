@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
-    backgroundColor: Colors.surfaceElevated,
+    backgroundColor: Colors.surface,
     borderRadius: Radius.md,
     borderWidth: 1,
     borderColor: Colors.border,
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   searchButtonText: {
     fontFamily: 'Manrope-Bold',
     fontSize: FontSizes.sm,
-    color: Colors.emerald[900],
+    color: Colors.surface,
   },
   errorText: {
     fontFamily: 'Manrope-Medium',
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
   thumbnailPlaceholderText: {
     fontFamily: 'Manrope-Medium',
     fontSize: FontSizes.xs,
-    color: Colors.gold[600],
+    color: Colors.textMuted,
   },
   loanCardBody: {
     flex: 1,
@@ -392,12 +392,12 @@ const styles = StyleSheet.create({
   loanAmount: {
     fontFamily: 'Manrope-Bold',
     fontSize: FontSizes.md,
-    color: Colors.gold[400],
+    color: Colors.textPrimary,
   },
   loanStatus: {
     fontFamily: 'Manrope-Medium',
     fontSize: FontSizes.xs,
-    color: Colors.emerald[300],
+    color: Colors.primary,
     textTransform: 'capitalize',
     marginTop: 4,
   },
