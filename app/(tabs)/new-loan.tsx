@@ -85,10 +85,15 @@ export default function NewLoanScreen() {
   const currentRate = goldRates.find((r) => r.purity === purity);
   const ratePerGram = currentRate ? Number(currentRate.rate_per_gram) : 0;
   
-  const purityOptions = goldRates.map(r => ({
-    label: r.purity === 'custom' ? 'Custom' : r.purity.toUpperCase(),
-    value: r.purity
-  }));
+  const customRateObj = goldRates.find((r) => r.purity === 'custom');
+  const customRate = customRateObj ? Number(customRateObj.rate_per_gram) : 0;
+  
+  const purityOptions = goldRates
+    .filter(r => r.purity !== 'custom')
+    .map(r => ({
+      label: r.purity.toUpperCase(),
+      value: r.purity
+    }));
 
   // LTV = (Principal / (Net Weight * Rate per Gram)) * 100
   const netWeightNum = parseFloat(netWeight) || 0;
@@ -100,7 +105,8 @@ export default function NewLoanScreen() {
     interestPerHundredNum,
     durationNum
   );
-  const goldValue = netWeightNum * ratePerGram;
+  // Gold Value for LTV calculation is always based on the custom rate
+  const goldValue = netWeightNum * customRate;
   const ltvPercentage =
     goldValue > 0 ? (principalNum / goldValue) * 100 : 0;
   const ltvColor =
@@ -393,18 +399,12 @@ export default function NewLoanScreen() {
             Enter customer and gold details below
           </Text>
 
-          {loadingRates ? (
+          {loadingRates && (
             <ActivityIndicator
               size="small"
               color={Colors.gold[400]}
               style={styles.loader}
             />
-          ) : (
-            <View style={styles.rateBanner}>
-              <Text style={styles.rateBannerText}>
-                {purity === 'custom' ? 'Custom' : purity.toUpperCase()} Rate: {formatINR(ratePerGram)}/g
-              </Text>
-            </View>
           )}
 
           <View style={styles.formCard}>
@@ -599,7 +599,23 @@ export default function NewLoanScreen() {
                 </View>
 
                 <View style={styles.ltvDetailRow}>
-                  <Text style={styles.ltvDetailLabel}>Gold Value</Text>
+                  <Text style={styles.ltvDetailLabel}>
+                    {purity === 'custom' ? 'Custom Lending Rate' : `${purity.toUpperCase()} Market Value`}
+                  </Text>
+                  <Text style={styles.ltvDetailValue}>
+                    {purity === 'custom' ? `${formatINR(ratePerGram)}/g` : formatINR(ratePerGram * netWeightNum)}
+                  </Text>
+                </View>
+                {purity !== 'custom' && (
+                  <View style={styles.ltvDetailRow}>
+                    <Text style={styles.ltvDetailLabel}>Custom Lending Rate</Text>
+                    <Text style={styles.ltvDetailValue}>
+                      {formatINR(customRate)}/g
+                    </Text>
+                  </View>
+                )}
+                <View style={styles.ltvDetailRow}>
+                  <Text style={styles.ltvDetailLabel}>Gold Value (at Custom Rate)</Text>
                   <Text style={styles.ltvDetailValue}>
                     {formatINR(goldValue)}
                   </Text>
